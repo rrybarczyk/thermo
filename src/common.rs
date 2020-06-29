@@ -2,7 +2,7 @@ pub(crate) use crate::{
   convert::Convert,
   error::Error,
   opt::Opt,
-  units::{Unit, INCH3_IN_LITER, INCH_IN_FOOT},
+  units::{constants::*, Unit},
 };
 pub(crate) use std::{
   fmt::{self, Display, Formatter},

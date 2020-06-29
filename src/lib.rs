@@ -1,8 +1,9 @@
 mod common;
-mod convert;
+pub mod convert;
 mod error;
 mod opt;
 mod run;
 mod units;
 
+// pub use crate::convert::Convert;
 pub use crate::run::run;

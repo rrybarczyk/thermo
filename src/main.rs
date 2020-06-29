@@ -1,4 +1,4 @@
 fn main() -> Result<(), ()> {
-  thermo::run();
+  thermo::run().unwrap();
   Ok(())
 }
