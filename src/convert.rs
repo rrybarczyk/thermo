@@ -212,12 +212,12 @@ impl Convert {
 
   /// Convert Watt to KiloWatt
   pub fn w_to_kw(w: f64) -> f64 {
-    w * WATT_TO_KILOWATT
+    w * MILLI
   }
 
   /// Convert KiloWatt to Watt
   pub fn kw_to_w(kw: f64) -> f64 {
-    kw * WATT_TO_KILOWATT.powi(-1)
+    kw * KILO
   }
 
   /// Convert W to foot pounds per second (ft-lb/sec)
@@ -227,7 +227,7 @@ impl Convert {
 
   /// Convert W to foot pounds per second (ft-lb/sec)
   pub fn ft_lb_per_s_to_kw(ftlb_per_s: f64) -> f64 {
-    ftlb_per_s * 1.0 / (WATT_TO_FEET_POUNDS_PER_SECOND * KILOWATT_TO_WATT)
+    ftlb_per_s * 1.0 / (WATT_TO_FEET_POUNDS_PER_SECOND * KILO)
   }
 
   /// Convert W to foot pounds per second (ft-lb/sec)
@@ -237,7 +237,62 @@ impl Convert {
 
   /// Convert kW to foot pounds per second (ft-lb/sec)
   pub fn kw_to_ft_lb_per_s(kw: f64) -> f64 {
-    kw * WATT_TO_FEET_POUNDS_PER_SECOND * KILOWATT_TO_WATT
+    kw * WATT_TO_FEET_POUNDS_PER_SECOND * KILO
+  }
+
+  /// Convert Pound Force to Newton
+  pub fn lbf_to_n(lbf: f64) -> f64 {
+    lbf * POUND_FORCE_TO_NEWTONS
+  }
+
+  /// Convert Newton to Pound Force
+  pub fn n_to_lbf(newtons: f64) -> f64 {
+    newtons * NEWTONS_TO_POUND_FORCE
+  }
+
+  /// Convert gram to pound
+  pub fn g_to_lb(gram: f64) -> f64 {
+    gram * GRAM_TO_POUND
+  }
+
+  /// Convert pound to gram
+  pub fn lb_to_g(lb: f64) -> f64 {
+    lb * POUND_TO_GRAM
+  }
+
+  /// Convert second to minute
+  pub fn s_to_min(s: f64) -> f64 {
+    s * SECOND_TO_MINUTE
+  }
+
+  /// Convert minute to second
+  pub fn min_to_s(s: f64) -> f64 {
+    s * MINUTE_TO_SECOND
+  }
+
+  /// Convert grams/sec to pound/minute
+  pub fn g_per_s_to_lb_per_min(g_per_s: f64) -> f64 {
+    g_per_s * 1.0 / SECOND_TO_MINUTE * GRAM_TO_POUND
+  }
+
+  /// Convert lbf/in² to Pascal
+  pub fn lbf_per_in2_to_pascal(lbf_per_in2: f64) -> f64 {
+    lbf_per_in2 * POUND_FORCE_PER_IN2_TO_PASCAL
+  }
+
+  /// Convert Pascal to lbf/in²
+  pub fn pascal_to_lbf_per_in2(pascal: f64) -> f64 {
+    pascal * PASCAL_TO_POUND_FORCE_PER_IN2
+  }
+
+  /// Convert meter to feet
+  pub fn m_to_ft(m: f64) -> f64 {
+    m * METER_TO_FOOT
+  }
+
+  /// Convert foot to meter
+  pub fn ft_to_m(m: f64) -> f64 {
+    m * FOOT_TO_METER
   }
 }
 
@@ -418,12 +473,124 @@ mod tests {
   }
 
   #[test]
-  #[ignore]
   fn convert_ft_lb_per_s_to_kw() -> Result<(), ()> {
     let tolerance = 10.0_f64.powi(-3);
     let want = 0.00135582;
     let ft_lb_per_s = 1.0;
     let have = Convert::ft_lb_per_s_to_kw(ft_lb_per_s);
+
+    assert_eq!(compare(want, have, tolerance), true);
+    Ok(())
+  }
+
+  #[test]
+  fn convert_lbf_to_n() -> Result<(), ()> {
+    let tolerance = 10.0_f64.powi(-3);
+    let want = 4.4482216;
+    let lbf = 1.0;
+    let have = Convert::lbf_to_n(lbf);
+
+    assert_eq!(compare(want, have, tolerance), true);
+    Ok(())
+  }
+
+  #[test]
+  fn convert_n_to_lbf() -> Result<(), ()> {
+    let tolerance = 10.0_f64.powi(-3);
+    let want = 0.2248089;
+    let newton = 1.0;
+    let have = Convert::n_to_lbf(newton);
+
+    assert_eq!(compare(want, have, tolerance), true);
+    Ok(())
+  }
+
+  #[test]
+  fn convert_g_to_lb() -> Result<(), ()> {
+    let tolerance = 10.0_f64.powi(-5);
+    let want = 0.00220462;
+    let g = 1.0;
+    let have = Convert::g_to_lb(g);
+
+    assert_eq!(compare(want, have, tolerance), true);
+    Ok(())
+  }
+
+  #[test]
+  fn convert_s_to_min() -> Result<(), ()> {
+    let tolerance = 10.0_f64.powi(-3);
+    let want = 0.01666666;
+    let s = 1.0;
+    let have = Convert::s_to_min(s);
+
+    assert_eq!(compare(want, have, tolerance), true);
+    Ok(())
+  }
+
+  #[test]
+  fn convert_min_to_s() -> Result<(), ()> {
+    let tolerance = 10.0_f64.powi(-3);
+    let want = 60.0;
+    let min = 1.0;
+    let have = Convert::min_to_s(min);
+
+    assert_eq!(compare(want, have, tolerance), true);
+    Ok(())
+  }
+
+  ///   g    60 s       lb
+  /// 1 - * ----- *  ---------
+  ///   s    min     453.592 g
+  #[test]
+  fn convert_g_per_s_to_lb_per_min() -> Result<(), ()> {
+    let tolerance = 10.0_f64.powi(-3);
+    let want = 0.132277;
+    let g_per_s = 1.0;
+    let have = Convert::g_per_s_to_lb_per_min(g_per_s);
+
+    assert_eq!(compare(want, have, tolerance), true);
+    Ok(())
+  }
+
+  #[test]
+  fn convert_lbf_per_in2_to_pascal() -> Result<(), ()> {
+    let tolerance = 10.0_f64.powi(-2);
+    let want = 6894.76;
+    let lbf_per_in2 = 1.0;
+    let have = Convert::lbf_per_in2_to_pascal(lbf_per_in2);
+
+    assert_eq!(compare(want, have, tolerance), true);
+    Ok(())
+  }
+
+  #[test]
+  fn convert_pascal_to_lbf_per_in2() -> Result<(), ()> {
+    let tolerance = 10.0_f64.powi(-5);
+    let want = 0.000145038;
+    let pascal = 1.0;
+    let have = Convert::pascal_to_lbf_per_in2(pascal);
+
+    assert_eq!(compare(want, have, tolerance), true);
+    Ok(())
+  }
+
+  #[test]
+  fn convert_m_to_ft() -> Result<(), ()> {
+    let tolerance = 10.0_f64.powi(-5);
+    let want = 3.28084;
+    let m = 1.0;
+    let have = Convert::m_to_ft(m);
+
+    assert_eq!(compare(want, have, tolerance), true);
+    Ok(())
+  }
+
+  #[test]
+  fn convert_ft_to_m() -> Result<(), ()> {
+    let tolerance = 10.0_f64.powi(-5);
+    let want = 0.3048;
+    let ft = 1.0;
+    let have = Convert::ft_to_m(ft);
 
     assert_eq!(compare(want, have, tolerance), true);
     Ok(())
